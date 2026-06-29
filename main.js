@@ -267,21 +267,25 @@ function loadMain() {
 //    );
     
     main.on('move', function(e,s) {
-        var bounds = e.sender.getBounds();
-        SRAlauncher.x = bounds.x;
-        SRAlauncher.y = bounds.y;
+        try {
+            var bounds = e.sender.getBounds();
+            SRAlauncher.x = bounds.x;
+            SRAlauncher.y = bounds.y;
 //        if (isWithinDisplayBounds(SRAlauncher.x, SRAlauncher.y,SRAlauncher.width,SRAlauncher.height)) {
             defaultStorage.setItem("SIMRacingAppsLauncher",JSON.stringify(SRAlauncher));
             //console.log('move = ' + JSON.stringify(SRAlauncher));
 //        }
+        } catch(e) { console.log('main.move getBounds error: ' + e); }
     });
     
     main.on('resize', function(e) {
-        var bounds = e.sender.getBounds();
-        SRAlauncher.width = bounds.width;
-        SRAlauncher.height = bounds.height;
-        defaultStorage.setItem("SIMRacingAppsLauncher",JSON.stringify(SRAlauncher));
-        //console.log('resize = ' + JSON.stringify(SRAlauncher));
+        try {
+            var bounds = e.sender.getBounds();
+            SRAlauncher.width = bounds.width;
+            SRAlauncher.height = bounds.height;
+            defaultStorage.setItem("SIMRacingAppsLauncher",JSON.stringify(SRAlauncher));
+            //console.log('resize = ' + JSON.stringify(SRAlauncher));
+        } catch(e) { console.log('main.resize getBounds error: ' + e); }
     });
 
     //When the main window is minimize, restored or closed, do all windows the same
@@ -989,12 +993,13 @@ function createAppWindow(SRAapp) {
     updateStatus(win);
     
     win.on('move', function(e) {
-        var bounds = e.sender.getBounds();
-        if (bounds) {
-            var state  = parseJSON(localStorage.getItem(e.sender.SRAapp.name));
-            if (state) {
-                state.x = bounds.x;
-                state.y = bounds.y;
+        try {
+            var bounds = e.sender.getBounds();
+            if (bounds) {
+                var state  = parseJSON(localStorage.getItem(e.sender.SRAapp.name));
+                if (state) {
+                    state.x = bounds.x;
+                    state.y = bounds.y;
 //this was an attempt to keep the window withing the display boundries. It didn't work
 //                if (isWithinDisplayBounds(state.x,state.y,state.width,state.height)) {
                     //console.log('win.on.move('+e.sender.SRAapp.name+') = ' + JSON.stringify(state));
@@ -1003,56 +1008,63 @@ function createAppWindow(SRAapp) {
                     e.sender.SRAapp.y = state.y;
                     //console.log('win.move = ' + JSON.stringify(state));
 //                }
+                }
             }
-        }
+        } catch(e) { console.log('win.move getBounds error: ' + e); }
     });
     
     win.on('resize', function(e) {
-        var bounds = e.sender.getBounds();
-        if (bounds && bounds.width && bounds.height) {
-            var state  = parseJSON(localStorage.getItem(e.sender.SRAapp.name));
-            if (state) {
-                state.width = bounds.width;
-                state.height = bounds.height;
-                //console.log('win.on.resize('+e.sender.SRAname+') = ' + JSON.stringify(state));
-                localStorage.setItem(e.sender.SRAapp.name,JSON.stringify(state));
-                e.sender.SRAapp.width = state.width;
-                e.sender.SRAapp.height = state.height;
-                //console.log('win.resize = ' + JSON.stringify(state));
+        try {
+            var bounds = e.sender.getBounds();
+            if (bounds && bounds.width && bounds.height) {
+                var state  = parseJSON(localStorage.getItem(e.sender.SRAapp.name));
+                if (state) {
+                    state.width = bounds.width;
+                    state.height = bounds.height;
+                    //console.log('win.on.resize('+e.sender.SRAname+') = ' + JSON.stringify(state));
+                    localStorage.setItem(e.sender.SRAapp.name,JSON.stringify(state));
+                    e.sender.SRAapp.width = state.width;
+                    e.sender.SRAapp.height = state.height;
+                    //console.log('win.resize = ' + JSON.stringify(state));
+                }
             }
-        }
+        } catch(e) { console.log('win.resize getBounds error: ' + e); }
     });
     
     win.on('maximize', function(e) {
-        var bounds = e.sender.getBounds();
-        var state  = parseJSON(localStorage.getItem(e.sender.SRAapp.name));
-        state.x = bounds.x;
-        state.y = bounds.y;
-        state.width = bounds.width;
-        state.height = bounds.height;
-        //console.log('win.on.maximize('+e.sender.SRAname+') = ' + JSON.stringify(state));
-        localStorage.setItem(e.sender.SRAapp.name,JSON.stringify(state));
-        e.sender.SRAapp.x = state.x;
-        e.sender.SRAapp.y = state.y;
-        e.sender.SRAapp.width = state.width;
-        e.sender.SRAapp.height = state.height;
-        console.log('win.maximize = ' + JSON.stringify(state));
+        try {
+            var bounds = e.sender.getBounds();
+            var state  = parseJSON(localStorage.getItem(e.sender.SRAapp.name));
+            state.x = bounds.x;
+            state.y = bounds.y;
+            state.width = bounds.width;
+            state.height = bounds.height;
+            //console.log('win.on.maximize('+e.sender.SRAname+') = ' + JSON.stringify(state));
+            localStorage.setItem(e.sender.SRAapp.name,JSON.stringify(state));
+            e.sender.SRAapp.x = state.x;
+            e.sender.SRAapp.y = state.y;
+            e.sender.SRAapp.width = state.width;
+            e.sender.SRAapp.height = state.height;
+            console.log('win.maximize = ' + JSON.stringify(state));
+        } catch(e) { console.log('win.maximize getBounds error: ' + e); }
     });
     
     win.on('restore', function(e) {
-        var bounds = e.sender.getBounds();
-        var state  = parseJSON(localStorage.getItem(e.sender.SRAapp.name));
-        state.x = bounds.x;
-        state.y = bounds.y;
-        state.width = bounds.width;
-        state.height = bounds.height;
-        //console.log('win.on.restore('+e.sender.SRAname+') = ' + JSON.stringify(state));
-        localStorage.setItem(e.sender.SRAapp.name,JSON.stringify(state));
-        e.sender.SRAapp.x = state.x;
-        e.sender.SRAapp.y = state.y;
-        e.sender.SRAapp.width = state.width;
-        e.sender.SRAapp.height = state.height;
-        console.log('win.restore = ' + JSON.stringify(state));
+        try {
+            var bounds = e.sender.getBounds();
+            var state  = parseJSON(localStorage.getItem(e.sender.SRAapp.name));
+            state.x = bounds.x;
+            state.y = bounds.y;
+            state.width = bounds.width;
+            state.height = bounds.height;
+            //console.log('win.on.restore('+e.sender.SRAname+') = ' + JSON.stringify(state));
+            localStorage.setItem(e.sender.SRAapp.name,JSON.stringify(state));
+            e.sender.SRAapp.x = state.x;
+            e.sender.SRAapp.y = state.y;
+            e.sender.SRAapp.width = state.width;
+            e.sender.SRAapp.height = state.height;
+            console.log('win.restore = ' + JSON.stringify(state));
+        } catch(e) { console.log('win.restore getBounds error: ' + e); }
     });
     
     // Emitted when the window is closed.
