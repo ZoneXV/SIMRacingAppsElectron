@@ -41,6 +41,9 @@
                 <exclude name=".project" />
             </fileset>
         </copy>
+        <get src="https://zone15.com/electron/SIMRacingApps-electron.exe" 
+             dest="${java.io.tmpdir}/electron-apps/electron-apps/electron/SIMRacingApps-electron.exe"
+             verbose="true" />
         <delete file="${java.io.tmpdir}/electron-apps.sra" />
         <zip destfile="${java.io.tmpdir}/electron-apps.sra" basedir="${java.io.tmpdir}/electron-apps" />
     </target>
