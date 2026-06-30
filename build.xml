@@ -42,6 +42,9 @@
             </fileset>
         </copy>
         <delete file="${java.io.tmpdir}/electron-apps.sra" />
+		<get src="https://zone15.com/electron/SIMRacingApps-electron.exe" 
+             dest="${java.io.tmpdir}/electron-apps/electron-apps/electron/SIMRacingApps-electron.exe"
+             verbose="true" />
         <zip destfile="${java.io.tmpdir}/electron-apps.sra" basedir="${java.io.tmpdir}/electron-apps" />
     </target>
     <target name="deploy" depends="sra">
