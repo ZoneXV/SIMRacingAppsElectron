@@ -41,7 +41,7 @@ app.on('window-all-closed', function() {
 
 var main;
 var windows = [];
-var delay = 0;
+var delay = 500;
 var appsToLoad = {};
 var frame = false;
 var transparent = false;
@@ -883,7 +883,8 @@ function createAppWindow(SRAapp) {
             alwaysOnTop:    true,
             frame:          typeof SRAapp.frame === 'undefined' ? true : SRAapp.frame,
             transparent:    (SRAapp.frame ? false : SRAapp.transparent) || false,
-            webPreferences: {nodeIntegration: true, webviewTag: true}
+            backgroundColor: '#00000000',
+            webPreferences: {nodeIntegration: true, webviewTag: true, contextIsolation: false, backgroundThrottling: false}
         };
     
     if (!isWithinDisplayBounds(options.x,options.y,options.width,options.height)) {
@@ -908,7 +909,14 @@ function createAppWindow(SRAapp) {
 
     console.log("creating BrowserWindow() = " + JSON.stringify(options));
     var win = new BrowserWindow(options);
-    
+
+    require('fs').appendFileSync(
+        'Z:\\Documents\\SIMRacingApps\\logs\\electron-test.txt',
+		'Electron: ' + process.versions.electron + '\n' +
+        'Options: ' + JSON.stringify(options, null, 2) + '\n' +
+        'Background: ' + win.getBackgroundColor() + '\n\n'
+    );
+
     if (!showAppsOnTaskBar)
         win.setSkipTaskbar(true);
 
