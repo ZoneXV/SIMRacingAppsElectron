@@ -6,6 +6,14 @@ const electron       = require('electron');
 const app = electron.app;  // Module to control application life.
 const BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.
 const ipc = electron.ipcMain;
+const nativeTheme = electron.nativeTheme;
+
+//Force light mode regardless of the OS theme setting.
+//Electron 15+ follows the OS dark/light preference, and several of SRA's
+//dynamically generated pages (e.g. "restart the server", "app uploaded")
+//have no explicit background/text colors, so on a dark-mode OS they render
+//as black-on-black. Forcing 'light' here keeps all windows readable.
+nativeTheme.themeSource = 'light';
 var screen = null;
 var storagePath = app.getPath('documents')+'\\SIMRacingApps\\storage\\';
 console.log("Electron storage at "+storagePath);
