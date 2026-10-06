@@ -14,6 +14,13 @@ const nativeTheme = electron.nativeTheme;
 //have no explicit background/text colors, so on a dark-mode OS they render
 //as black-on-black. Forcing 'light' here keeps all windows readable.
 nativeTheme.themeSource = 'light';
+
+//Disable Chromium's automatic dark-mode color inversion for web content.
+//Without this, Electron 15+ (Chromium's "Auto Dark Mode for Web Contents")
+//will invert unstyled pages (like the plain HTML the servlets return)
+//when the OS is in dark mode, causing black-on-black rendering.
+app.commandLine.appendSwitch('disable-features', 'WebContentsForceDark');
+
 var screen = null;
 var storagePath = app.getPath('documents')+'\\SIMRacingApps\\storage\\';
 console.log("Electron storage at "+storagePath);
